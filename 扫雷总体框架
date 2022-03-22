@@ -1,0 +1,78 @@
+
+void startshow()
+{
+	printf("********************************\n");
+	printf("****1.play************2.exit****\n");
+	printf("********************************\n");
+
+}
+
+
+
+
+void game()
+{
+	char back[ROWS][COLS] = {0};
+	char show[ROWS][COLS] = {0};
+	turn(back, ROW, COL, '0');//初始化完毕！
+	turn(show, ROW, COL, '*');
+
+	displayboard(back, ROW, COL);//打印！
+	//displayboard(back, ROW, COL);
+
+	printf("\n");
+	set(back, ROW, COL);//设置地雷！
+	find(show, back);
+	//displayboard(back, ROW, COL);
+
+	
+
+
+}
+
+void choose()
+{
+	int input = 0;
+	srand((unsigned int)time(NULL));
+	do
+	{
+		
+		printf("请输入0或1:>");
+		scanf("%d", &input);
+		if (input == 1)
+		{
+			game();//开始游戏
+		}
+		else if (input == 0)
+		{
+			printf("已经退出游戏！");
+
+		}
+		else
+		{
+			printf("输入错误！");
+		}
+
+
+
+
+	} while (input);
+
+
+}
+
+
+
+
+
+
+int main()
+{
+	startshow();
+	choose();
+
+
+
+
+	return 0;
+}
