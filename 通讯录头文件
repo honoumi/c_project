@@ -1,0 +1,36 @@
+#pragma once
+#define DEFSIZE 3
+enum count
+{
+	NAME_MAX = 20,
+	TELE_MAX = 13,
+	SEX_MAX = 5,
+	ADDR_MAX = 30,
+	AGE_MXA = 10
+};
+
+
+typedef struct People
+{
+	char name[NAME_MAX];
+	char tele[TELE_MAX];
+	char sex[SEX_MAX];
+	char addr[ADDR_MAX];
+	int age;
+
+}People;
+
+typedef struct contact
+{
+	People* contact;//存放元素信息
+	int size;//已有的元素个数！
+	int capacity;//当前通讯的最大容量！
+}contact;
+
+
+void init(contact* dest);//初始化
+void addcontact(contact* dest);//添加用户信息
+void showcontact(contact* dest);//展示用户信息
+void searchcontact(contact* dest);//搜索特定的用户！
+void modifcontact(contact* dest);//修改特定的用户信息！
+void delcontact(contact* dest);
