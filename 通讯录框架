@@ -61,6 +61,9 @@ int main()
 			printf("暂时没有写.....");
 			break;
 		case eixt:
+			//销毁通讯录
+			free(num.contact);
+			num.contact = NULL;
 			printf("退出成功！\n");
 			break;
 		default:
