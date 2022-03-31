@@ -1,27 +1,6 @@
-int Find(contact* dest,char name[])//缺陷无法寻找相同名字的人！
-{
-	int i = 0;
-	for (i = 0; i < dest->size; i++)
-	{
-		if (0 == strcmp(name, dest->contact[i].name))
-		{
-			return i ;
-		}
-	}
-	return -1;
-}
 
-void init(contact* dest)//进行初始化！！
-{
-	dest->contact = (People*)malloc(3 * sizeof(struct People));
-	if (dest->contact == NULL)
-	{
-		return;
-	}
-	dest->size = 0;
-	dest->capacity = DEFSIZE;
-}
-void ChackCapacity(contact *dest)
+#include "contact.h"
+void ChackCapacity(contact* dest)
 {
 	if (dest->size == dest->capacity)
 	{
@@ -36,11 +15,61 @@ void ChackCapacity(contact *dest)
 
 	}
 }
+int Find(contact* dest, char name[])//缺陷无法寻找相同名字的人！
+{
+	int i = 0;
+	for (i = 0; i < dest->size; i++)
+	{
+		if (0 == strcmp(name, dest->contact[i].name))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void loadcontact(contact* dest)
+{
+	People tmp = { 0 };
+	FILE* pfread = fopen("contact.dat", "rb");
+	if (pfread == NULL)
+	{
+		printf("loadcontact:%s\n", strerror(errno));
+		return;
+	}
+	int i = 0;
+	while(fread(&tmp, sizeof(People), 1, pfread))
+	{
+		ChackCapacity(dest);
+		dest->contact[dest->size] = tmp;
+		dest->size++;
+	}
+	fclose(pfread);
+	pfread = NULL;
+}
+
+void init(contact* dest)//进行初始化！！
+{
+	dest->contact = (People*)malloc(3 * sizeof(struct People));
+	if (dest->contact == NULL)
+	{
+		return;
+	}
+	dest->size = 0;
+	dest->capacity = DEFSIZE;
+
+	//把文件中已经存放的通讯录的信息加载到通讯录里面！
+	loadcontact(dest);
+}
+
+
+
 void addcontact(contact* dest)//进行通讯录的添加！
 {
 	ChackCapacity(dest);
 	//1.如果满了就赠容，没有满就不敢
 	//然后增加数据！
+
 	printf("请输入姓名:>");
 	scanf("%s", dest->contact[dest->size].name);
 	printf("请输入性别:>");
@@ -88,11 +117,11 @@ void showcontact(contact* dest)//进行通讯录的打印！
 		for (i = 0; i < dest->size; i++)
 		{
 			printf("%-20s\t%-5d\t%-5s\t%-13s\t%-30s\n"
-			,dest->contact[i].name
-			,dest->contact[i].age
-			,dest->contact[i].sex
-			,dest->contact[i].tele
-			,dest->contact[i].addr);
+				, dest->contact[i].name
+				, dest->contact[i].age
+				, dest->contact[i].sex
+				, dest->contact[i].tele
+				, dest->contact[i].addr);
 		}
 	}
 
@@ -110,7 +139,7 @@ void searchcontact(contact* dest)
 	{
 		printf("请输入要查找的名字:>");
 		scanf("%s", name);
-		int ret = Find(dest,name);
+		int ret = Find(dest, name);
 		if (ret == -1)
 		{
 			printf("该通讯录不存在该人物！\n");
@@ -144,7 +173,7 @@ void modifcontact(contact* dest)
 		int ret = Find(dest, name);
 		if (ret == -1)
 		{
-			printf("通讯录无该人物！");
+			printf("通讯录无该人物！\n");
 		}
 		else
 		{
@@ -191,4 +220,26 @@ void delcontact(contact* dest)
 			printf("删除成功！\n");
 		}
 	}
+}
+
+
+void savecontat(contact* dest)
+{
+	FILE* pfwrite = fopen("contact.dat","wb");
+	if (pfwrite == NULL)
+	{
+		printf("savecontat:%s\n", strerror(errno));
+	}
+	//写通讯录的数据到文件中！
+	int i = 0;
+	for (i = 0; i < dest->size; i++)
+	{
+		fwrite(&(dest->contact[i]), sizeof(People), 1, pfwrite);
+	}
+	printf("存储成功！\n");
+	fclose(pfwrite);
+	pfwrite = NULL;
+
+
+
 }
