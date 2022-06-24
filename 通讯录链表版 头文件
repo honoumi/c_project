@@ -1,0 +1,58 @@
+#pragma once
+#define _CRT_SECURE_NO_WARNINGS
+
+#define DEFSIZE 3
+typedef int DATETYPE;
+typedef char ARRTYPE;
+
+
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+#include<time.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<errno.h>
+enum count
+{
+	NAME_MAX = 20,
+	TELE_MAX = 13,
+	SEX_MAX = 5,
+	ADDR_MAX = 30,
+	AGE_MXA = 10
+};
+
+
+typedef struct People//可能要修改元素个数和名字
+{
+	ARRTYPE name[NAME_MAX];
+	ARRTYPE tele[TELE_MAX];
+	ARRTYPE sex[SEX_MAX];
+	ARRTYPE addr[ADDR_MAX];
+	DATETYPE age;
+
+}People;
+
+typedef struct  SListNode
+{
+	People* contact;//存放元素信息 //可能要修改名字
+	SListNode* prev;
+	SListNode* next;
+    //因为是链表所以不需要记录什么容量
+}SListNode;
+
+
+SListNode* ListInit();//初始化 
+void AddList(SListNode* head);//添加信息
+void BuyNewNode(SListNode* head);//创建
+void ShowList(SListNode* head);//展示所有信息
+void SearchList(SListNode* head);//查找指定信息！
+void ModifList(SListNode* head);//修改指定信息！
+void DelList(SListNode* head);//删除特定信息！
+void SaveList(SListNode* head);//保存信息！
+void LoadSave(SListNode* head);//加载信息！
+void DesList(SListNode* head);//删除所有存储信息！
+
+
+
+
