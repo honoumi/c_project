@@ -1,0 +1,73 @@
+#include"contact.h"
+void menu()
+{
+	printf("**************************************\n");
+	printf("***  1.add               2.del     ***\n");
+	printf("***  3.search            4.modif   ***\n");
+	printf("***  5.show              6.save    ***\n");
+	printf("***  7.destroy           0.exit    ***\n");
+	printf("**************************************\n");
+
+}
+enum option//用于增加代码的可读性！
+{
+	eixt,
+	add,
+	del,
+	search,
+	modif,
+	show,
+	save,
+	des
+};
+
+
+
+int main()
+{
+	SListNode* head = ListInit();
+	LoadSave(head);
+	int input;
+	do
+	{
+		menu();
+		
+		printf("请输入:>");
+		scanf("%d", &input);
+		switch (input)
+		{
+		case add:
+			AddList(head);
+			break;
+		case del:
+			DelList(head);
+			break;
+		case search:
+			SearchList(head);
+			break;
+		case modif:
+			ModifList(head);
+			break;
+		case show:
+			ShowList(head);
+			break;
+		case save:
+			SaveList(head);
+			break;
+		case des:
+			DesList(head);
+			break;
+		case eixt:
+			printf("退出成功！\n");
+			break;
+		default:
+			printf("输入错误！\n");
+			break;
+		}
+
+	} while (input);
+
+
+
+	return 0;
+}
