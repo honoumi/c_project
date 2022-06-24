@@ -1,0 +1,224 @@
+#include"contact.h"
+
+SListNode* ListInit()
+{
+	SListNode* newnode = (SListNode*)malloc(sizeof(SListNode));
+	newnode->contact = (People*)malloc(sizeof(People));
+	if (newnode == NULL)
+	{
+		printf("添加失败！\n");
+	}
+	else
+	{
+		newnode->next = newnode;
+		newnode->prev = newnode;
+		return newnode;
+	}
+	return NULL;
+}
+void ListPrint(SListNode* pos)//修改
+{
+	SListNode* cur = pos;
+	printf("姓名:%s\n", cur->contact->name);
+	printf("性别:%s\n", cur->contact->sex);
+	printf("年龄:%d\n", cur->contact->age);
+	printf("电话:%s\n", cur->contact->tele);
+	printf("地址:%s\n", cur->contact->addr);
+}
+SListNode* BuyNewNode()//修改
+{
+	SListNode* newnode = (SListNode*)malloc(sizeof(SListNode));
+	newnode->contact = (People*)malloc(sizeof(People));
+	printf("请输入姓名:>");
+	scanf("%s", newnode->contact->name);
+	printf("请输入性别:>");
+	scanf("%s", newnode->contact->sex);
+	printf("请输入电话:>");
+	scanf("%s", newnode->contact->tele);
+	printf("请输入地址:>");
+	scanf("%s", newnode->contact->addr);
+	printf("请输入年龄:>");
+	scanf("%d", &newnode->contact->age);
+	return newnode;
+}
+
+void AddList(SListNode* head)//添加数据
+{
+	assert(head);
+	SListNode* newnode = BuyNewNode();
+	if (newnode != NULL)
+	{
+		SListNode* tail = head->prev;
+		tail->next = newnode;
+		newnode->prev = tail;
+		newnode->next = head;
+		head->prev = newnode;
+		printf("添加成功\n");
+	}
+}
+void ShowList(SListNode* head)//显示所有数据
+{
+	assert(head);
+	SListNode* cur = head->next;
+	if (cur == head)
+		printf("没有信息！\n");
+	else
+	{
+		while (cur != head)
+		{
+			ListPrint(cur);
+			printf("\n");
+			cur = cur->next;
+		}
+	}
+}
+
+void SearchList(SListNode* head)//查找特定数据
+{
+	assert(head);
+	printf("请输入要查找的名字:>");//修改
+	ARRTYPE name[NAME_MAX];
+	scanf("%s", name);
+	SListNode* cur = head->next;
+	int mark = 0;
+	while (cur != head)
+	{
+		if (strcmp(cur->contact->name, name) == 0)
+		{
+			ListPrint(cur);
+			printf("\n");
+			mark++;
+		}
+		cur = cur->next;
+	}
+	if (!mark)
+		printf("没有该人\n");
+}
+
+void ModifList(SListNode* head)//修改特定数据
+{
+	assert(head);
+	SListNode* cur = head->next;
+	if (cur == head)
+	{
+		printf("无信息！\n");
+	}
+	else
+	{
+		printf("请输入要查找的名字:>");//修改
+		ARRTYPE name[NAME_MAX];
+		scanf("%s", name);
+		while (cur != head)
+		{
+			if (strcmp(cur->contact->name, name) == 0)
+			{
+				printf("请输入姓名:>");
+				scanf("%s", cur->contact->name);
+				printf("请输入性别:>");
+				scanf("%s", cur->contact->sex);
+				printf("请输入电话:>");
+				scanf("%s", cur->contact->tele);
+				printf("请输入地址:>");
+				scanf("%s", cur->contact->addr);
+				printf("请输入年龄:>");
+				scanf("%d", &cur->contact->age);
+				break;
+			}
+			cur = cur->next;
+		}
+		if (cur == head)
+			printf("没有该人！\n");
+	}
+}
+
+void DelList(SListNode* head)//删除特定数据
+{
+	assert(head);
+	SListNode* cur = head->next;
+	if (cur->next == head)
+		printf("无信息可删除！\n");
+	else
+	{
+		printf("请输入要删除的名字:>");//修改
+		ARRTYPE name[NAME_MAX];
+		scanf("%s", name);
+		while (cur != head)
+		{
+			if (strcmp(cur->contact->name, name) == 0)
+			{
+				SListNode* prev = cur->prev;
+				SListNode* next = cur->next;
+				prev->next = next;
+				next->prev = prev;
+				free(cur->contact);
+				free(cur);
+				printf("删除成功！\n");
+				break;
+			}
+			cur = cur->next;
+		}
+	}
+}
+void SaveList(SListNode* head)//将数据保存到文件中！
+{
+	FILE* pfwrite = fopen("savelist.txt", "wb");
+	if (pfwrite == NULL)
+	{
+		printf("savecontat:%s\n", strerror(errno));
+	}
+	else
+	{
+		SListNode* cur = head->next;
+		while (cur != head)
+		{
+			fwrite(cur->contact, sizeof(People), 1, pfwrite);
+			cur = cur->next;
+		}
+		printf("存储成功！\n");
+		fclose(pfwrite);
+		pfwrite = NULL;
+	}
+
+}
+void LoadSave(SListNode* head)//将数据从文件中读取！
+{
+	FILE* pfread = fopen("savelist.txt", "rb");
+	SListNode* newnode = (SListNode*)malloc(sizeof(SListNode));
+	newnode->contact = (People*)malloc(sizeof(People));
+	if (pfread)
+	{
+		while(fread(newnode->contact, sizeof(People), 1, pfread) != 0)
+		{
+			SListNode* tail = head->prev;
+			tail->next = newnode;
+			newnode->prev = tail;
+			newnode->next = head;
+			head->prev = newnode;
+
+			newnode = (SListNode*)malloc(sizeof(SListNode));
+			newnode->contact = (People*)malloc(sizeof(People));
+
+		}
+	}
+	fclose(pfread);
+	pfread = NULL;
+}
+
+void DesList(SListNode* head)//清除所有文件数据
+{
+	FILE* pfwrite = fopen("savelist.txt", "wb");
+	fclose(pfwrite);
+	pfwrite = NULL;
+	SListNode* cur = head->next;
+	SListNode* next = cur->next;
+	while (cur != head)
+	{
+		free(cur->contact);
+		free(cur);
+		cur = next;
+		next = cur->next;
+	}
+	head->next = head;
+	head->prev = head;
+	printf("已全部清除！\n");
+}
