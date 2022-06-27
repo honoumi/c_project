@@ -1,6 +1,6 @@
 #include"contact.h"
 
-SListNode* ListInit()
+SListNode* ListInit()//带头双向链表！
 {
 	SListNode* newnode = (SListNode*)malloc(sizeof(SListNode));
 	newnode->contact = (People*)malloc(sizeof(People));
@@ -24,6 +24,8 @@ void ListPrint(SListNode* pos)//修改
 	printf("年龄:%d\n", cur->contact->age);
 	printf("电话:%s\n", cur->contact->tele);
 	printf("地址:%s\n", cur->contact->addr);
+	printf("Email:%s\n", cur->contact->Email);
+	printf("生日:%s\n", cur->contact->birth);
 }
 SListNode* BuyNewNode()//修改
 {
@@ -39,6 +41,10 @@ SListNode* BuyNewNode()//修改
 	scanf("%s", newnode->contact->addr);
 	printf("请输入年龄:>");
 	scanf("%d", &newnode->contact->age);
+	printf("请输入邮箱地址:>");
+	scanf("%s", newnode->contact->Email);
+	printf("请输入生日时间:>");
+	scanf("%s", newnode->contact->birth);
 	return newnode;
 }
 
@@ -112,16 +118,20 @@ void ModifList(SListNode* head)//修改特定数据
 		{
 			if (strcmp(cur->contact->name, name) == 0)
 			{
-				printf("请输入姓名:>");
+				printf("请输入新姓名:>");
 				scanf("%s", cur->contact->name);
-				printf("请输入性别:>");
+				printf("请输入新性别:>");
 				scanf("%s", cur->contact->sex);
-				printf("请输入电话:>");
+				printf("请输入新电话:>");
 				scanf("%s", cur->contact->tele);
-				printf("请输入地址:>");
+				printf("请输入新地址:>");
 				scanf("%s", cur->contact->addr);
-				printf("请输入年龄:>");
+				printf("请输入新年龄:>");
 				scanf("%d", &cur->contact->age);
+				printf("请输入新的生日日期:>");
+				scanf("%s", cur->contact->birth);
+				printf("请输入新的邮箱地址:>");
+				scanf("%s", cur->contact->Email);
 				break;
 			}
 			cur = cur->next;
@@ -200,6 +210,8 @@ void LoadSave(SListNode* head)//将数据从文件中读取！
 
 		}
 	}
+	free(newnode->contact);
+	free(newnode);
 	fclose(pfread);
 	pfread = NULL;
 }
@@ -221,4 +233,124 @@ void DesList(SListNode* head)//清除所有文件数据
 	head->next = head;
 	head->prev = head;
 	printf("已全部清除！\n");
+}
+
+
+
+int user()
+{
+	int numberagain;
+	int passwordagain;
+	int start;
+	int input;
+	FILE* puser = fopen("user.txt", "ab+");
+	FILE* read = fopen("user.txt", "rb");
+	char key[12] = "123456789";
+	User use;
+	User cmp;
+	int a = acount_number;
+	int b = password;
+start:
+	int count = 0;
+	char ch;
+	printf("请问您有账号吗？\n");
+	printf("1.有    0.无\n");
+	scanf("%d", &input);
+	while (ch = getchar() != '\n');
+	if (input == 0)
+	{
+		char key2[100];
+		printf("申请账号前请输入10位数邀请码！\n");
+		scanf("%s", key2);
+		if (strcmp(key2, key) == 0)
+		{
+		numberagain:
+			char tempnumber[acount_number + 100];
+			User tempuser;
+			printf("请输入您的账号:>(账号长度不超过%d位)\n",acount_number-1);
+			scanf("%s", tempnumber);
+			int i = 0;
+			while (tempnumber[i] != '\0')
+			{
+				i++;
+			}
+			if (i >= a)
+			{
+				printf("账号过长！请重新输入！\n");
+				goto numberagain;
+			}
+			else
+			{
+				strcpy(tempuser.Number, tempnumber);
+				rewind(read);
+				while (fread(&cmp, sizeof(User), 1, read))
+				{
+					if (strcmp(tempuser.Number, cmp.Number) == 0)
+					{
+						printf("该账号已经存在！\n");
+						goto numberagain;
+					}
+				}
+				passwordagain:
+				printf("请输入您的密码:>(密码不超过%d位)\n",password);
+				char temppassword[password+100];
+				scanf("%s", temppassword);
+				int i = 0;
+				while (temppassword[i] != '\0')
+				{
+					i++;
+				}
+				if (i >= b)
+				{
+					printf("密码太长了，请重新输入！\n");
+					goto passwordagain;
+				}
+
+				printf("请再次验证您的密码:>\n");
+				scanf("%s", tempuser.Password);
+				if (strcmp(temppassword, tempuser.Password) == 0)
+				{
+					fwrite(&tempuser, sizeof(User), 1, puser);
+					fclose(puser);
+					goto start;
+				}
+				else
+				{
+					printf("前后密码不一致！请重新输入！\n");
+					goto passwordagain;
+				}
+
+			}
+		}
+		else
+		{
+			printf("邀请码错误！\n");
+			goto start;
+		}
+	}
+	else if(input == 1)
+	{
+		int mark = 0;
+		printf("请输入您的账号\n");
+		scanf("%s", use.Number);
+		printf("请输入您的密码:>\n");
+		scanf("%s", use.Password);
+		rewind(read);
+		while (fread(&cmp, sizeof(User), 1, read))
+		{
+			if (strcmp(cmp.Number, use.Number) == 0 && strcmp(cmp.Password, use.Password) == 0)
+			{
+				fclose(read);
+				return 1;
+			}
+		}
+		if (!mark)
+			printf("账号或密码错！\n");
+		goto start;
+	}
+	else
+	{
+		printf("输入错误！\n");
+		goto start;		
+	}
 }
