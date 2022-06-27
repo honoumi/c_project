@@ -277,6 +277,8 @@ start:
 			if (i >= a)
 			{
 				printf("账号过长！请重新输入！\n");
+				system("pause");
+				system("cls");
 				goto numberagain;
 			}
 			else
@@ -288,6 +290,8 @@ start:
 					if (strcmp(tempuser.Number, cmp.Number) == 0)
 					{
 						printf("该账号已经存在！\n");
+						system("pause");
+						system("cls");
 						goto numberagain;
 					}
 				}
@@ -303,6 +307,8 @@ start:
 				if (i >= b)
 				{
 					printf("密码太长了，请重新输入！\n");
+					system("pause");
+					system("cls");
 					goto passwordagain;
 				}
 
@@ -317,6 +323,8 @@ start:
 				else
 				{
 					printf("前后密码不一致！请重新输入！\n");
+					system("pause");
+					system("cls");
 					goto passwordagain;
 				}
 
@@ -325,6 +333,8 @@ start:
 		else
 		{
 			printf("邀请码错误！\n");
+			system("pause");
+			system("cls");
 			goto start;
 		}
 	}
@@ -345,12 +355,18 @@ start:
 			}
 		}
 		if (!mark)
+		{
 			printf("账号或密码错！\n");
+			system("pause");
+			system("cls");
+		}
 		goto start;
 	}
 	else
 	{
 		printf("输入错误！\n");
+		system("pause");
+		system("cls");
 		goto start;		
 	}
 }
