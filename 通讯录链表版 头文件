@@ -1,11 +1,5 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-
-#define DEFSIZE 3
-typedef int DATETYPE;
-typedef char ARRTYPE;
-
-
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
@@ -13,13 +7,23 @@ typedef char ARRTYPE;
 #include<stdlib.h>
 #include<assert.h>
 #include<errno.h>
+
+typedef int DATETYPE;
+typedef char ARRTYPE;
 enum count
 {
 	NAME_MAX = 20,
 	TELE_MAX = 13,
 	SEX_MAX = 5,
 	ADDR_MAX = 30,
-	AGE_MXA = 10
+	AGE_MXA = 10,
+	BIR_MAX = 10,
+	EMAIL_MAX = 30
+};
+enum mima
+{
+	acount_number = 12,
+	password  = 20
 };
 
 
@@ -30,6 +34,8 @@ typedef struct People//可能要修改元素个数和名字
 	ARRTYPE sex[SEX_MAX];
 	ARRTYPE addr[ADDR_MAX];
 	DATETYPE age;
+	ARRTYPE birth[BIR_MAX];
+	ARRTYPE Email[EMAIL_MAX];
 
 }People;
 
@@ -41,6 +47,11 @@ typedef struct  SListNode
     //因为是链表所以不需要记录什么容量
 }SListNode;
 
+typedef struct User
+{
+	char Number[acount_number];
+	char Password[password];
+}User;
 
 SListNode* ListInit();//初始化 
 void AddList(SListNode* head);//添加信息
@@ -52,7 +63,4 @@ void DelList(SListNode* head);//删除特定信息！
 void SaveList(SListNode* head);//保存信息！
 void LoadSave(SListNode* head);//加载信息！
 void DesList(SListNode* head);//删除所有存储信息！
-
-
-
-
+int user();//登录模块！
