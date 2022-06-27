@@ -1,11 +1,17 @@
 #include"contact.h"
+
 void menu()
 {
 	printf("**************************************\n");
-	printf("***  1.add               2.del     ***\n");
-	printf("***  3.search            4.modif   ***\n");
-	printf("***  5.show              6.save    ***\n");
-	printf("***  7.destroy           0.exit    ***\n");
+	printf("*******     通     讯    录    *******\n");
+	printf("***           1.增   加           ***\n");
+	printf("***           2.删   除           ***\n");
+	printf("***           3.搜   索           ***\n");
+	printf("***           4.修   改           ***\n");
+	printf("***           5.展   示           ***\n");
+	printf("***           6.保   存           ***\n");
+	printf("***           7.销毁通讯录        ***\n");
+	printf("***           0.退   出           ***\n");
 	printf("**************************************\n");
 
 }
@@ -27,47 +33,57 @@ int main()
 {
 	SListNode* head = ListInit();
 	LoadSave(head);
-	int input;
-	do
+	int key = user();
+	system("cls");
+	printf("登录成功！\n");
+	system("pause");
+	
+	if (key)
 	{
-		menu();
 		
-		printf("请输入:>");
-		scanf("%d", &input);
-		switch (input)
+		int input;
+
+		do
 		{
-		case add:
-			AddList(head);
-			break;
-		case del:
-			DelList(head);
-			break;
-		case search:
-			SearchList(head);
-			break;
-		case modif:
-			ModifList(head);
-			break;
-		case show:
-			ShowList(head);
-			break;
-		case save:
-			SaveList(head);
-			break;
-		case des:
-			DesList(head);
-			break;
-		case eixt:
-			printf("退出成功！\n");
-			break;
-		default:
-			printf("输入错误！\n");
-			break;
-		}
+			menu();
+			printf("请输入:>");
+			scanf("%d", &input);
+			char ch;
+			while (ch = getchar() != '\n');
+			switch (input)
+			{
+			case add:
+				AddList(head);
+				break;
+			case del:
+				DelList(head);
+				break;
+			case search:
+				SearchList(head);
+				break;
+			case modif:
+				ModifList(head);
+				break;
+			case show:
+				ShowList(head);
+				break;
+			case save:
+				SaveList(head);
+				break;
+			case des:
+				DesList(head);
+				break;
+			case eixt:
+				printf("退出成功！\n");
+				break;
+			default:
+				printf("输入错误！\n");
+				break;
+			}
 
-	} while (input);
+		} while (input);
 
-
+	}
 
 	return 0;
 }
